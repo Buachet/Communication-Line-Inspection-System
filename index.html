@@ -2,68 +2,122 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <base target="_top"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PEA Buachet - Cable Inspection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap');
-        body { 
-            font-family: 'Sarabun', sans-serif; 
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-        }
-        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        
-        /* ปรับฟอนต์ให้เข้มอ่านง่ายตามคำขอ */
-        label { color: #111827 !important; font-weight: 800 !important; font-size: 0.95rem !important; }
-        input, select { color: #000 !important; font-weight: 600 !important; }
-        .rainbow-text { background: linear-gradient(to right, #fff, #f0f0f0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-    </style>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap');
+    
+    body { 
+        font-family: 'Sarabun', sans-serif; 
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+    }
+
+    @keyframes gradient { 
+        0% { background-position: 0% 50%; } 
+        50% { background-position: 100% 50%; } 
+        100% { background-position: 0% 50%; } 
+    }
+
+    .glass-card { 
+        background: rgba(255, 255, 255, 0.95); 
+        backdrop-filter: blur(10px); 
+        border: 1px solid rgba(255, 255, 255, 0.2); 
+    }
+    
+    /* --- ส่วนที่แก้ไข: ปรับตัวหนังสือสีเทาให้เข้มขึ้นชัดเจน --- */
+    label, .text-gray-700 { 
+        color: #111827 !important; /* เปลี่ยนเป็นสี Gray-900 (เข้มจัด) */
+        font-weight: 700 !important; /* เพิ่มความหนาให้อ่านง่ายขึ้น */
+    }
+
+    /* ปรับแต่งช่อง Input และ Select ให้ตัวหนังสือข้างในเข้มขึ้นด้วย */
+    input, select { 
+        color: #000000 !important; 
+        font-weight: 500 !important;
+        transition: all 0.5s ease; 
+    }
+
+    /* ปรับสี Placeholder (ตัวหนังสือจางๆ ในช่องกรอก) ให้เข้มขึ้น */
+    input::placeholder {
+        color: #4b5563 !important; /* Gray-600 */
+        opacity: 1;
+    }
+
+    }
+    
+    input:focus, select:focus { 
+        transform: translateY(-2px); 
+        border-color: #3b82f6; 
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+</style>
 </head>
-<body class="min-h-screen py-6 px-4">
+<body class="min-h-screen py-6 px-4 md:px-10">
 
     <div class="pb-6 pt-10 text-center">
-        <h1 class="text-3xl md:text-5xl font-extrabold rainbow-text uppercase">ระบบบันทึกผลการตรวจสอบสายสื่อสาร</h1>
-        <p class="text-white text-xs font-bold mt-2 tracking-widest opacity-90">PEA BUACHET INSPECTION SYSTEM</p>
+        <h1 class="text-2xl md:text-5xl font-extrabold rainbow-text uppercase">
+            ระบบบันทึกผลการตรวจสอบสายสื่อสาร
+        </h1>
+        <p class="text-white text-sm font-bold mt-2 uppercase tracking-[0.1em] opacity-80">
+            Communication line inspection system
+        </p>
     </div>
 
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto">
         <div class="glass-card p-6 md:p-8 rounded-3xl shadow-2xl mb-10">
-            <form id="inspectionForm" class="space-y-5">
+            <form id="inspectionForm" class="space-y-6">
+                
                 <div>
-                    <label class="block mb-1"><i class="fas fa-city text-blue-500 mr-1"></i> ตำบล</label>
-                    <select id="tambonInput" required class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">
+                        <i class="fas fa-city text-blue-500 mr-1"></i> ตำบล
+                    </label>
+                    <select id="tambonInput" required class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400">
                         <option value="">-- กรุณาเลือกตำบล --</option>
-                        <option value="บัวเชด">บัวเชด</option><option value="อาโพน">อาโพน</option><option value="จรัส">จรัส</option><option value="สะเดา">สะเดา</option><option value="สำเภาลูน">สำเภาลูน</option><option value="ตาวัง">ตาวัง</option>
+                        <option value="บัวเชด">บัวเชด</option>
+                        <option value="อาโพน">อาโพน</option>
+                        <option value="จรัส">จรัส</option>
+                        <option value="สะเดา">สะเดา</option>
+                        <option value="สำเภาลูน">สำเภาลูน</option>
+                        <option value="ตาวัง">ตาวัง</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block mb-1"><i class="fas fa-map-marker-alt text-red-500 mr-1"></i> เส้นทาง / สถานที่</label>
-                    <input type="text" id="locInput" required placeholder="ระบุเส้นทางตรวจสอบ" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">
+                        <i class="fas fa-map-marked-alt text-red-500 mr-1"></i> เส้นทาง / สถานที+(ละเมิด ชื่อตัวย่อบริษัท/ปี พ.ศ.)
+                    </label>
+                    <input type="text" id="locInput" required placeholder="เช่น บ.หมื่นสังข์ +(ละเมิด TTT/69)" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl focus:ring-4 focus:ring-red-100 focus:border-red-400 outline-none">
                 </div>
 
                 <div>
-                    <label class="block mb-1"><i class="fas fa-bolt text-orange-500 mr-1"></i> ลำดับเสาไฟฟ้า</label>
-                    <input type="text" id="poleInput" required placeholder="ใส่หมายเลขเสา" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">
+                        <i class="fas fa-bolt text-orange-500 mr-1"></i> ลำดับเสาไฟฟ้าในแผนผังหมุด
+                    </label>
+                    <input type="text" id="poleInput" required placeholder="ใส่ตัวเลข" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl focus:ring-4 focus:ring-orange-100 focus:border-orange-400 outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block mb-1">ชนิดสาย</label>
-                        <select id="typeInput" onchange="updateSub()" required class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
+                        <label class="block text-sm font-bold text-gray-700 mb-1">
+                            <i class="fas fa-layer-group text-yellow-500 mr-1"></i> ชนิดสาย
+                        </label>
+                        <select id="typeInput" onchange="updateSub()" required class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl outline-none focus:ring-4 focus:ring-yellow-100">
                             <option value="">เลือก</option>
                             <option value="สายทองแดง">สายทองแดง</option>
                             <option value="สายใยแก้วนำแสง">สายใยแก้วนำแสง</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-1">ประเภทสาย</label>
-                        <select id="subInput" required class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
-                            <option value="">เลือกประเภท</option>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">
+                            <i class="fas fa-info-circle text-green-500 mr-1"></i> ประเภทสาย
+                        </label>
+                        <select id="subInput" required class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl outline-none focus:ring-4 focus:ring-green-100">
+                            <option value="">เลือก</option>
                         </select>
                     </div>
                 </div>
@@ -82,144 +136,50 @@
                         <input type="text" id="coreInput" required placeholder="1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:border-green-500">
                     </div>
                 </div>
-                    <label class="block mb-1">บริษัทเจ้าของสาย</label>
-                    <input type="text" id="ownerInput" required placeholder="NT, AIS, True, etc." class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">
+                        <i class="fas fa-building text-blue-500 mr-1"></i> บริษัทเจ้าของสาย 
+                    </label>
+                    <input type="text" id="ownerInput" required placeholder="เช่น NT, AIS, True" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100">
                 </div>
 
-                <div class="relative border-2 border-dashed border-indigo-200 rounded-3xl p-6 text-center hover:bg-indigo-50 transition-all cursor-pointer">
-                    <input type="file" id="fileInput" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer" onchange="processImg(event)">
-                    <div id="previewArea" class="hidden">
-                        <canvas id="canvas" class="mx-auto rounded-2xl shadow-xl max-w-full"></canvas>
-                        <p class="text-xs text-indigo-600 mt-2 font-bold">แตะเพื่อถ่ายรูปใหม่</p>
-                    </div>
-                    <div id="promptArea">
-                        <i class="fas fa-camera text-4xl text-indigo-300 mb-2"></i>
-                        <p class="text-sm text-gray-400 font-bold uppercase">กดเพื่อเปิดกล้อง</p>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-camera-retro text-indigo-500 mr-1"></i>รูปถ่ายพร้อม Stamp
+                    </label>
+                    <div class="relative border-2 border-dashed border-indigo-200 rounded-3xl p-6 text-center hover:bg-indigo-50 transition-colors group cursor-pointer">
+                        <input type="file" id="fileInput" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer" onchange="processImg(event)">
+                        <div id="previewArea" class="hidden">
+                            <canvas id="canvas" class="mx-auto rounded-2xl shadow-xl max-w-full"></canvas>
+                            <p class="text-xs text-indigo-500 mt-2 font-bold animate-pulse">แตะที่รูปเพื่อถ่ายใหม่</p>
+                        </div>
+                        <div id="promptArea">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-indigo-300 mb-2"></i>
+                            <p class="text-sm text-gray-400 font-bold uppercase">กดเพื่อเปิดกล้อง</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-blue-50 p-4 rounded-2xl flex items-center space-x-3 border border-blue-100">
-                    <i class="fas fa-location-dot text-blue-500 animate-pulse"></i>
-                    <span id="gpsText" class="text-xs font-bold text-blue-700">กำลังดึงพิกัด GPS...</span>
+                <div class="bg-gray-100 p-4 rounded-2xl flex items-center justify-between border border-gray-200 shadow-inner">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-location-crosshairs text-blue-500 animate-spin"></i>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase">พิกัดปัจจุบัน</p>
+                            <span id="gpsText" class="text-xs font-bold text-gray-600">กำลังรับสัญญาณ GPS...</span>
+                        </div>
+                    </div>
                     <input type="hidden" id="lat"><input type="hidden" id="lng">
                 </div>
 
                 <div>
-                    <label class="block mb-1">ชื่อผู้บันทึก</label>
-                    <input type="text" id="inspectorInput" required placeholder="ชื่อ-นามสกุล" class="w-full p-3.5 bg-yellow-50 border border-yellow-200 rounded-2xl">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อผู้บันทึกข้อมูล <i class="fas fa-user-check text-purple-500 ml-1"></i></label>
+                    <input type="text" id="inspectorInput" required placeholder="ผู้รายงาน" class="w-full p-3.5 bg-yellow-50 border border-yellow-200 rounded-2xl outline-none font-bold text-gray-700">
                 </div>
 
-                <button type="submit" class="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl font-black text-xl shadow-lg active:scale-95 transition-all">
-                    บันทึกข้อมูล <i class="fas fa-cloud-upload-alt ml-1"></i>
+                <button type="submit" class="w-full py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-2xl font-black text-xl shadow-2xl transition-all active:scale-95">
+                    บันทึกเข้าระบบ <i class="fas fa-save ml-1"></i>
                 </button>
             </form>
         </div>
-    </div>
-
-    <div style="display: flex; justify-content: center; width: 100%; padding: 20px 0;">
-        <nav style="width: auto; min-width: 300px; margin: 0 auto; border-radius: 50px; background: rgba(255, 255, 255, 0.25); -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(235, 186, 223, 0.4); display: flex; justify-content: center; align-items: center; padding: 12px 40px;">     
-            <span style="font-size: 1rem; font-weight: 800; color: #5a0b4d; text-shadow: 0 0 7px #fff;">© Copyright : PEA Buachet</span>
-        </nav> 
-    </div>
-
-    <div id="loader" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden flex flex-col items-center justify-center z-50 text-white">
-        <div class="animate-spin rounded-full h-16 w-16 border-4 border-t-white border-white/20 mb-4"></div>
-        <p class="font-bold">ระบบกำลังบันทึกข้อมูลและรูปภาพ...</p>
-    </div>
-
-    <script>
-        // ใส่ URL Web App ของคุณที่นี่
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQWeKOWl8rTBmrWc3jgAQ5q9oWXakkjcBBNatCf7OxPa7Yu8ZxpimucHhRB6FZbfFU/exec";
-
-        const subs = { "สายทองแดง": ["CU", "Dropwire", "Coaxial"], "สายใยแก้วนำแสง": ["Dropwire", "Fig.8", "ADSS", "ARSS"] };
-        function updateSub() {
-            const t = document.getElementById('typeInput').value;
-            const s = document.getElementById('subInput');
-            s.innerHTML = '<option value="">เลือกประเภท</option>';
-            if (t) subs[t].forEach(i => { let o = document.createElement('option'); o.value = o.innerText = i; s.appendChild(o); });
-        }
-
-        function processImg(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.getElementById('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const maxDim = 1000; 
-                    let w = img.width, h = img.height;
-                    if (w > maxDim) { h = h * (maxDim / w); w = maxDim; }
-                    canvas.width = w; canvas.height = h;
-                    ctx.drawImage(img, 0, 0, w, h);
-                    
-                    // Stamp ข้อมูลบนรูป
-                    ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(0, h-80, w, 80);
-                    ctx.fillStyle = "white"; ctx.font = "bold 20px Sarabun";
-                    ctx.fillText(`📍 ${document.getElementById('lat').value}, ${document.getElementById('lng').value}`, 20, h-45);
-                    ctx.fillText(`📅 ${new Date().toLocaleString('th-TH')}`, 20, h-15);
-
-                    document.getElementById('previewArea').classList.remove('hidden');
-                    document.getElementById('promptArea').classList.add('hidden');
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function getGPS() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(p => {
-                    document.getElementById('lat').value = p.coords.latitude.toFixed(6);
-                    document.getElementById('lng').value = p.coords.longitude.toFixed(6);
-                    document.getElementById('gpsText').innerHTML = "✅ พิกัดพร้อมใช้งาน";
-                }, () => { document.getElementById('gpsText').innerText = "⚠️ โปรดอนุญาต GPS"; });
-            }
-        }
-
-        document.getElementById('inspectionForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const cvs = document.getElementById('canvas');
-            if (cvs.width === 0) return alert("กรุณาถ่ายรูป!");
-
-            document.getElementById('loader').classList.remove('hidden');
-
-            const payload = {
-                tambon: document.getElementById('tambonInput').value,
-                location: document.getElementById('locInput').value,
-                poleId: document.getElementById('poleInput').value,
-                type: document.getElementById('typeInput').value,
-                subtype: document.getElementById('subInput').value,
-                diameter: document.getElementById('diaInput').value,
-                quantity: document.getElementById('qtyInput').value,
-                core: document.getElementById('coreInput').value,
-                owner: document.getElementById('ownerInput').value,
-                lat: document.getElementById('lat').value,
-                lng: document.getElementById('lng').value,
-                inspector: document.getElementById('inspectorInput').value,
-                image: cvs.toDataURL('image/jpeg', 0.7)
-            };
-
-            try {
-                // ใช้ fetch แทน google.script.run เพื่อให้รันบน GitHub ได้
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // สำคัญ: เพื่อเลี่ยง CORS เบื้องต้น
-                    cache: 'no-cache',
-                    body: JSON.stringify(payload)
-                });
-                
-                alert("ส่งข้อมูลเรียบร้อยแล้ว! (หากข้อมูลไม่เข้า Sheet ให้ตรวจสอบการ Deploy ของคุณ)");
-                location.reload();
-            } catch (err) {
-                alert("Error: " + err);
-            } finally {
-                document.getElementById('loader').classList.add('hidden');
-            }
-        };
-
-        window.onload = getGPS;
-    </script>
-</body>
-</html>
+    </
