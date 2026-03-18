@@ -6,28 +6,77 @@
     <title>PEA Buachet - Cable Inspection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&display=swap');
+        
         body { 
             font-family: 'Sarabun', sans-serif; 
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }
-        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+
+        @keyframes gradient { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.98); /* ปรับให้ขาวขึ้นเพื่อให้ตัวหนังสือดำเด่นชัด */
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+        }
         
-        /* ปรับฟอนต์ให้เข้มอ่านง่ายตามคำขอ */
-        label { color: #111827 !important; font-weight: 800 !important; font-size: 0.95rem !important; }
-        input, select { color: #000 !important; font-weight: 600 !important; }
-        .rainbow-text { background: linear-gradient(to right, #fff, #f0f0f0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        /* --- ส่วนที่ปรับปรุง: ตัวหนังสือสีดำเข้มทั้งหมด --- */
+        
+        /* หัวข้อใหญ่ (Title) - เปลี่ยนจาก Rainbow เป็นสีดำเข้มพร้อมขอบขาวจางๆ ให้ดูเด่น */
+        .black-title {
+            color: #000000 !important;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+        }
+
+        /* หัวข้อรอง (Sub-title) */
+        .sub-title {
+            color: #000000 !important;
+            font-weight: 800;
+            opacity: 0.9;
+        }
+
+        /* หัวข้อในฟอร์ม (Labels) */
+        label { 
+            color: #000000 !important; 
+            font-weight: 800 !important; 
+            font-size: 1rem !important; 
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ช่องกรอกข้อมูลและตัวเลือก (Input & Select) */
+        input, select { 
+            color: #000000 !important; 
+            font-weight: 700 !important; 
+            border: 1.5px solid #d1d5db !important;
+        }
+
+        /* ตัวหนังสือจางๆ ในช่องกรอก (Placeholder) */
+        input::placeholder {
+            color: #4b5563 !important;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body class="min-h-screen py-6 px-4">
 
     <div class="pb-6 pt-10 text-center">
-        <h1 class="text-3xl md:text-5xl font-extrabold rainbow-text uppercase">ระบบบันทึกผลการตรวจสอบสายสื่อสาร</h1>
-        <p class="text-white text-xs font-bold mt-2 tracking-widest opacity-90">PEA BUACHET</p>
+        <h1 class="text-3xl md:text-5xl font-extrabold black-title uppercase">
+            ระบบบันทึกผลการตรวจสอบสายสื่อสาร
+        </h1>
+        <p class="sub-title text-xs mt-2 tracking-widest uppercase">
+            Communication line inspection system 
+        </p>
+    </div>
+        <p class="text-white text-xs font-bold mt-2 tracking-widest opacity-90"/p>
     </div>
 
     <div class="max-w-3xl mx-auto">
@@ -41,9 +90,11 @@
                     </select>
                 </div>
 
-                <div>
-                    <label class="block mb-1"><i class="fas fa-map-marker-alt text-red-500 mr-1"></i> เส้นทาง / สถานที่</label>
-                    <input type="text" id="locInput" required placeholder="ระบุเส้นทางตรวจสอบ" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
+                            <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">
+                        <i class="fas fa-map-marked-alt text-red-500 mr-1"></i> เส้นทาง / สถานที+(ละเมิด ชื่อตัวย่อบริษัท/ปี พ.ศ.)
+                    </label>
+                    <input type="text" id="locInput" required placeholder="เช่น บ.หมื่นสังข์ +(ละเมิด TTT/69)" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl focus:ring-4 focus:ring-red-100 focus:border-red-400 outline-none">
                 </div>
 
                 <div>
@@ -68,24 +119,26 @@
                     </div>
                 </div>
 
-                              <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-3 gap-3">
                     <div>
                         <label class="block text-[12px] font-black text-gray-700 mb-1 uppercase tracking-tighter">เส้นผ่านศูนย์กลาง(มม.)</label>
                         <input type="text" id="diaInput" required placeholder="0.01" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-[12px] font-black text-gray-700 mb-1 uppercase tracking-tighter">จำนวนเส้น</label>
-                        <input type="text" id="qtyInput" required placeholder="0" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:border-blue-500">
+                        <input type="text" id="qtyInput" required placeholder="1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-[12px] font-black text-gray-700 mb-1 uppercase tracking-tighter">จำนวน Core</label>
-                        <input type="text" id="coreInput" required placeholder="0" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:border-green-500">
+                        <input type="text" id="coreInput" required placeholder="1" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:border-green-500">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block mb-1">บริษัทเจ้าของสาย</label>
-                    <input type="text" id="ownerInput" required placeholder="NT, AIS, True, etc." class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">
+                        <i class="fas fa-building text-blue-500 mr-1"></i> บริษัทเจ้าของสาย 
+                    </label>
+                    <input type="text" id="ownerInput" required placeholder="เช่น NT, AIS, True" class="w-full p-3.5 bg-gray-50 border border-gray-300 rounded-2xl outline-none focus:ring-4 focus:ring-blue-100">
                 </div>
 
                 <div class="relative border-2 border-dashed border-indigo-200 rounded-3xl p-6 text-center hover:bg-indigo-50 transition-all cursor-pointer">
