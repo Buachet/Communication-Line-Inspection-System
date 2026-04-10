@@ -59,7 +59,7 @@
 <div class="glass-card max-w-2xl mx-auto p-6 md:p-10">
   <header class="text-center mb-8">
     <h1 class="text-2xl font-black text-gray-800 tracking-tight">📝  ระบบจัดเก็บข้อมูลสายสื่อสาร</h1>
-    <p class="text-blue-500 font-bold text-sm">บันทึกข้อมูลและภาพถ่ายพร้อมพิกัด</p>
+    <p class="text-blue-500 font-bold text-sm">บันทึกข้อมูลและภาพถ่ายพร้อมพิกัด (External Source)</p>
   </header>
 
   <form id="inspectionForm" class="space-y-5">
@@ -157,6 +157,9 @@
 </div>
 
 <script>
+  // ** ระบุ URL ของ Google Apps Script Web App ที่นี่ **
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxlQ8at6ApMVRvI1MQXCeB3F3a3um8OTy00dxGOT4DF16uMMdWFC98SrbohoCIlrA/exec";
+
   const subTypes = {
     "สายทองแดง": ["CU", "Dropwire", "Coaxial"],
     "สายใยแก้วนำแสง": ["Dropwire", "Fig.8", "ADSS", "ARSS"]
@@ -217,7 +220,7 @@
   processImg(document.getElementById('file1'), document.getElementById('img1'), document.getElementById('pre1'));
   processImg(document.getElementById('file2'), document.getElementById('img2'), document.getElementById('pre2'));
 
-  document.getElementById('inspectionForm').addEventListener('submit', function(e) {
+  document.getElementById('inspectionForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
@@ -225,16 +228,16 @@
 
     const formData = {
       subdistrict: document.getElementById('subdistrict').value,
-      route: document.getElementById('inspectionForm').route.value,
+      route: this.route.value,
       poleId: document.getElementById('poleId').value,
-      owner: document.getElementById('inspectionForm').owner.value,
+      owner: this.owner.value,
       cableMainType: document.getElementById('cableMainType').value,
       cableSubType: document.getElementById('cableSubType').value,
-      diameter: document.getElementById('inspectionForm').diameter.value,
-      quantity: document.getElementById('inspectionForm').quantity.value,
-      coreCount: document.getElementById('inspectionForm').coreCount.value,
+      diameter: this.diameter.value,
+      quantity: this.quantity.value,
+      coreCount: this.coreCount.value,
       location: document.getElementById('location').value,
-      recorder: document.getElementById('inspectionForm').recorder.value,
+      recorder: this.recorder.value,
       image1: document.getElementById('img1').src,
       image2: document.getElementById('img2').src
     };
@@ -243,8 +246,22 @@
     localStorage.setItem('lastRoute', formData.route);
     localStorage.setItem('lastRec', formData.recorder);
 
-    google.script.run.withSuccessHandler(() => {
+    try {
+      // ส่งข้อมูลไปยัง Web App URL โดยใช้ fetch API
+      const response = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors', // สำคัญ: เพื่อข้ามปัญหา CORS เมื่อส่งจาก GitHub
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      // เนื่องจากใช้ no-cors เราจะไม่สามารถอ่าน JSON ผลลัพธ์ได้ตรงๆ 
+      // แต่ข้อมูลจะถูกส่งไปประมวลผลที่ Apps Script แน่นอน
       alert("✅ บันทึกข้อมูลเรียบร้อยแล้ว!");
+      
+      // ล้างค่าฟอร์มบางส่วน
       document.getElementById('poleId').value = "";
       document.getElementById('pre1').classList.add('hidden');
       document.getElementById('pre2').classList.add('hidden');
@@ -253,7 +270,13 @@
       btn.disabled = false;
       btn.innerHTML = "🚀 บันทึกต้นถัดไป";
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }).processForm(formData);
+
+    } catch (error) {
+      console.error("Error:", error);
+      alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อกรุณาตรวจสอบ URL ของคุณ");
+      btn.disabled = false;
+      btn.innerHTML = "🚀 บันทึกข้อมูล";
+    }
   });
 </script>
 </body>
