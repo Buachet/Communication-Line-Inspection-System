@@ -73,4 +73,14 @@ function processForm(data) {
   } catch (e) {
     return "Error: " + e.toString();
   }
+  // เปลี่ยน doGet เพื่อให้ทำหน้าที่เป็น API ส่งข้อมูลออกไป
+function doGet(e) {
+  var code = e.parameter.code; // รับค่าที่ส่งมาจาก GitHub
+  if(!code) return ContentService.createTextOutput("No code provided");
+  
+  var result = getCodeAsJSON(code); // สร้างฟังก์ชันใหม่ที่ return เป็น Object ไม่ใช่ HTML แบบเดิม
+  
+  return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+}
 }
