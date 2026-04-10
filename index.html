@@ -257,16 +257,4 @@
   });
 </script>
 </body>
-function findCode() {
-  var code = document.getElementById("idMeter").value;
-  // ลบ google.script.run ออก แล้วใช้ fetch ดึงข้อมูลจาก Web App URL ของคุณแทน
-  var webAppUrl = "https://script.google.com/macros/s/AKfycbwT4wkoNbSdz3LGlU_g7SSIzV90G_mQirJFIhkUaprfcDUXzjL37ZF73JPI5RLTnxIc/exec"; 
-  
-  fetch(webAppUrl + "?code=" + code)
-    .then(response => response.json())
-    .then(data => {
-      // นำข้อมูลที่ได้ (data) มาจัดรูปแบบ HTML และแสดงผลผ่าน updateData(data)
-    })
-    .catch(error => console.error('Error:', error));
-}  
 </html>
